@@ -1,0 +1,40 @@
+# depslib dependency file v1.0
+1525462069 source:c:\test\pattie\programacion-i\pattie\funciones\funciones.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"funciones.h"
+
+1525462069 c:\test\pattie\programacion-i\pattie\funciones\funciones.h
+
+1526077395 source:c:\test\pattie\ppl11c2018\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../Programacion-I/pattie/Funciones/funciones.h"
+	"Propietarios.h"
+	"Automoviles.h"
+
+1526070503 c:\test\pattie\ppl11c2018\propietarios.h
+
+1526075411 source:c:\test\pattie\ppl11c2018\ingresos.c
+
+1526077449 c:\test\pattie\ppl11c2018\automoviles.h
+	"Propietarios.h"
+
+1526073729 source:c:\test\pattie\ppl11c2018\propietarios.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../Programacion-I/pattie/Funciones/funciones.h"
+	"Propietarios.h"
+
+1526077815 source:c:\test\pattie\ppl11c2018\automoviles.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../Programacion-I/pattie/Funciones/funciones.h"
+	"Automoviles.h"
+	"Propietarios.h"
+
