@@ -4,7 +4,10 @@
 #define TAM_NOMBRE_APELLIDO 100
 #define TAM_DIRECCION 50
 #define TAM_TARJETA 50
-#define LIMITE_PROPIETARIOS 20
+#define LIMITE_PROPIETARIOS 200
+#define OCUPADO 0
+#define LIBRE 1
+#define BAJA 2
 
 typedef struct
 {

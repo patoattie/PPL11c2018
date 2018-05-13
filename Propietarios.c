@@ -4,10 +4,6 @@
 #include "../Programacion-I/pattie/Funciones/funciones.h"
 #include "Propietarios.h"
 
-#define OCUPADO 0
-#define LIBRE 1
-#define BAJA 2
-
 void ePropietario_init(ePropietario listado[],int limite)
 {
     int i;

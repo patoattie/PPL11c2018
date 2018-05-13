@@ -3,11 +3,6 @@
 #include <string.h>
 #include "../Programacion-I/pattie/Funciones/funciones.h"
 #include "Automoviles.h"
-#include "Propietarios.h"
-
-#define OCUPADO 0
-#define LIBRE 1
-#define BAJA 2
 
 void eAutomovil_init(eAutomovil listado[],int limite)
 {
@@ -32,13 +27,13 @@ void eAutomovil_hardcodeo(eAutomovil listado[],int limite)
 
     eAutomovil_init(listado, limite);
 
-    for(i = 0; i < 4; i++)
+    for(i = 0; i < 10; i++)
     {
         listado[i].idAutomovil = id[i];
         strcpy(listado[i].patente, patente[i]);
         listado[i].marca = marca[i];
         listado[i].idPropietario = propietario[i];
-        listado[i].estado = OCUPADO;
+        listado[i].estado = NO_ESTACIONADO;
     }
 }
 int eAutomovil_buscarLugarLibre(eAutomovil listado[],int limite)
@@ -93,7 +88,7 @@ int eAutomovil_siguienteId(eAutomovil listado[],int limite)
     {
         for(i=0; i<limite; i++)
         {
-            if(listado[i].estado == OCUPADO || listado[i].estado == BAJA) //Tengo en cuenta las bajas lógicas para no duplicar id al rehabilitar
+            if(listado[i].estado == NO_ESTACIONADO || listado[i].estado == BAJA) //Tengo en cuenta las bajas lógicas para no duplicar id al rehabilitar
             {
                     if(listado[i].idAutomovil>retorno)
                     {
@@ -107,6 +102,34 @@ int eAutomovil_siguienteId(eAutomovil listado[],int limite)
     return retorno+1; //Retorno el mayor ID más 1
 }
 
+int eAutomovil_ultimoIngresado(eAutomovil listado[],int limite)
+{
+    int retorno = -1;
+    int i;
+    int mayorId;
+    int posicionMayorId;
+    int flag = 0;
+
+    if(limite > 0 && listado != NULL)
+    {
+        retorno = -2;
+        for(i=0;i<limite;i++)
+        {
+            if(listado[i].estado == NO_ESTACIONADO && (listado[i].idAutomovil > mayorId || flag == 0))
+            {
+                flag = 1;
+                posicionMayorId = i;
+                mayorId = listado[i].idAutomovil;
+            }
+        }
+
+        if(flag == 1)
+        {
+            retorno = posicionMayorId;
+        }
+    }
+    return retorno;
+}
 
 int eAutomovil_buscarPorId(eAutomovil listado[] ,int limite, int id)
 {
@@ -117,7 +140,7 @@ int eAutomovil_buscarPorId(eAutomovil listado[] ,int limite, int id)
         retorno = -2;
         for(i=0;i<limite;i++)
         {
-            if(listado[i].estado == OCUPADO && listado[i].idAutomovil == id)
+            if(listado[i].estado == NO_ESTACIONADO && listado[i].idAutomovil == id)
             {
                 retorno = i;
                 //Hallé el elemento que buscaba y retorno su indice
@@ -125,6 +148,32 @@ int eAutomovil_buscarPorId(eAutomovil listado[] ,int limite, int id)
             }
         }
     }
+    return retorno;
+}
+
+int eAutomovil_validarLimiteEstacionados(eAutomovil listado[],int limite)
+{
+    int retorno = -1;
+    int cantidadEstacionados = 0;
+    int i;
+
+    if(limite > 0 && listado != NULL)
+    {
+        retorno = -2;
+        for(i = 0; i < limite; i++)
+        {
+            if(listado[i].estado == ESTACIONADO)
+            {
+                cantidadEstacionados++;
+            }
+        }
+
+        if(cantidadEstacionados < LIMITE_ESTACIONADOS)
+        {
+            retorno = 0; //OK
+        }
+    }
+
     return retorno;
 }
 
@@ -151,8 +200,11 @@ void eAutomovil_mostrarUnoConEstado(eAutomovil parametro, char nombrePropietario
     case BAJA:
         printf("\n %d - %s - %s - %s - %s", parametro.idAutomovil, parametro.patente, nombreMarca, nombrePropietario, "[BAJA]");
         break;
-    case OCUPADO:
+    case NO_ESTACIONADO:
         printf("\n %d - %s - %s - %s", parametro.idAutomovil, parametro.patente, nombreMarca, nombrePropietario);
+        break;
+    case ESTACIONADO:
+        printf("\n %d - %s - %s - %s - %s", parametro.idAutomovil, parametro.patente, nombreMarca, nombrePropietario, "[ESTACIONADO]");
         break;
     default:
         printf("\n %d - %s - %s - %s - %s", parametro.idAutomovil, parametro.patente, nombreMarca, nombrePropietario, "[N/A]");
@@ -160,24 +212,22 @@ void eAutomovil_mostrarUnoConEstado(eAutomovil parametro, char nombrePropietario
     }
 }
 
-int eAutomovil_mostrarListadoConOcupados(eAutomovil listaAutomoviles[], ePropietario listaPropietarios[], int limiteAutomoviles, int limitePropietarios)
+int eAutomovil_mostrarListadoPropietario(eAutomovil listado[], int limite, int idPropietario, char nombrePropietario[])
 {
     int retorno = -1;
     int i;
-    int posicionPropietario;
 
-    if(limitePropietarios > 0 && listaAutomoviles != NULL && listaPropietarios != NULL)
+    if(limite > 0 && listado != NULL)
     {
         retorno = 0;
-        for(i=0; i<limiteAutomoviles; i++)
+        for(i=0; i<limite; i++)
         {
-            if(listaAutomoviles[i].estado==OCUPADO)
+            if(listado[i].estado==NO_ESTACIONADO && listado[i].idPropietario == idPropietario)
             {
                 retorno = 1;
 
-                posicionPropietario = ePropietario_buscarPorId(listaPropietarios, limitePropietarios, listaAutomoviles[i].idPropietario);
                 //Se muestra al menos un elemento del array
-                eAutomovil_mostrarUno(listaAutomoviles[i], listaPropietarios[posicionPropietario].nombreApellido);
+                eAutomovil_mostrarUno(listado[i], nombrePropietario);
             }
         }
 
@@ -189,79 +239,25 @@ int eAutomovil_mostrarListadoConOcupados(eAutomovil listaAutomoviles[], ePropiet
     return retorno;
 }
 
-int eAutomovil_mostrarListado(eAutomovil listaAutomoviles[], ePropietario listaPropietarios[], int limiteAutomoviles, int limitePropietarios)
-{
-    int retorno = -1;
-    int i;
-    int posicionPropietario;
-
-    if(limiteAutomoviles > 0 && listaAutomoviles != NULL && listaPropietarios != NULL)
-    {
-        retorno = 0;
-        for(i=0; i<limiteAutomoviles; i++)
-        {
-            if(listaAutomoviles[i].estado==BAJA || listaAutomoviles[i].estado==OCUPADO)
-            {
-                retorno = 1;
-
-                posicionPropietario = ePropietario_buscarPorId(listaPropietarios, limitePropietarios, listaAutomoviles[i].idPropietario);
-                //Se muestra al menos un elemento del array
-                eAutomovil_mostrarUnoConEstado(listaAutomoviles[i], listaPropietarios[posicionPropietario].nombreApellido);
-            }
-        }
-
-        if(retorno == 0)
-        {
-            printf("\n*** NO HAY ELEMENTOS PARA MOSTRAR ***");
-        }
-    }
-    return retorno;
-}
-
-int eAutomovil_ingreso(eAutomovil listaAutomoviles[], ePropietario listaPropietarios[], int limiteAutomoviles, int limitePropietarios)
+int eAutomovil_alta(eAutomovil listado[], int limite, int idPropietario, char nombrePropietario[])
 {
     int retorno = -1;
     eAutomovil temporario;
     int indice;
     char confirma[3];
-    int indicePropietario;
-    int idPropietario;
-    int muestraListado;
 
-    if(limiteAutomoviles > 0 && listaAutomoviles != NULL)
+    if(limite > 0 && listado != NULL)
     {
         retorno = -2;
         //Busca lugar libre en el array
-        indice = eAutomovil_buscarLugarLibre(listaAutomoviles,limiteAutomoviles);
+        indice = eAutomovil_buscarLugarLibre(listado,limite);
         if(indice >= 0)
         {
-            do
-            {
-                muestraListado = ePropietario_mostrarListadoConOcupados(listaPropietarios, limitePropietarios);
-
-                switch(muestraListado)
-                {
-                case 0:
-                    printf("\nNo hay propietarios para hacer ingresos"); //retorno = -2
-                    break;
-                case 1:
-                    idPropietario = pedirEnteroSinValidar("\nIngrese ID del propietario a hacer el ingreso: ");
-                    indicePropietario = ePropietario_buscarPorId(listaPropietarios, limitePropietarios, idPropietario);
-                    if(indicePropietario < 0)
-                    {
-                        printf("No se encontro el ID ingresado. Por favor reingrese\n");
-                    }
-                    break;
-                default:
-                    printf("\Error al listar...\n"); //retorno = -2
-                    break;
-                }
-            } while(indicePropietario < 0 && muestraListado == 1);
             retorno = -3;
             //Campos con valores iniciales calculados
-            temporario.idAutomovil = eAutomovil_siguienteId(listaAutomoviles,limiteAutomoviles);
+            temporario.idAutomovil = eAutomovil_siguienteId(listado,limite);
             temporario.idPropietario = idPropietario;
-            temporario.estado = OCUPADO;
+            temporario.estado = NO_ESTACIONADO;
 
             retorno = -4;
             //Campos con valores pedidos al usuario
@@ -281,7 +277,7 @@ int eAutomovil_ingreso(eAutomovil listaAutomoviles[], ePropietario listaPropieta
             do
             {
                 printf("\nSe va a dar de alta:");
-                eAutomovil_mostrarUno(temporario, listaPropietarios[indicePropietario].nombreApellido);
+                eAutomovil_mostrarUno(temporario, nombrePropietario);
                 pedirString("\nConfirma esta accion? (S/N): ", confirma, 3);
                 if(stricmp(confirma, "S") != 0 && stricmp(confirma, "N") != 0)
                 {
@@ -293,7 +289,7 @@ int eAutomovil_ingreso(eAutomovil listaAutomoviles[], ePropietario listaPropieta
             {
                 retorno = 0;
                 //OK
-                listaAutomoviles[indice] = temporario;
+                listado[indice] = temporario;
             }
             else //retorno = -5
             {
@@ -307,6 +303,7 @@ int eAutomovil_ingreso(eAutomovil listaAutomoviles[], ePropietario listaPropieta
     }
     return retorno;
 }
+
 /*
 int ePropietario_baja(ePropietario listado[],int limite)
 {
