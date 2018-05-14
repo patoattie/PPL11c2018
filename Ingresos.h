@@ -19,6 +19,9 @@ int eIngreso_buscarPorId(eIngreso[] ,int limite, int id);
 int eIngreso_siguienteId(eIngreso[] ,int limite);
 int eIngreso_buscarLugarLibre(eIngreso listado[],int limite);
 
+void eIngreso_mostrarUno(eIngreso parametro, char nombrePropietario[], char patente[], char marca[], float importe);
+int eIngreso_mostrarListado(eIngreso[], int limite, int idPropietario, char nombrePropietario[], int idAutomovil, char patente[], char marca[], float importe);
+
 int eIngreso_alta(eIngreso[] ,int limite, int idAutomovil);
 
 #endif // INGRESOS_H_INCLUDED

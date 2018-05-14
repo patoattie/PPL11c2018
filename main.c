@@ -8,6 +8,7 @@
 
 int eAutomovil_mostrarListado(eAutomovil[], ePropietario[], int limiteAutomoviles, int limitePropietarios);
 int eAutomovil_ingreso(eAutomovil[], ePropietario[], int limiteAutomoviles, int limitePropietarios);
+int eAutomovil_egreso(eAutomovil[], ePropietario[], eIngreso[], int limiteAutomoviles, int limitePropietarios, int limiteIngresos);
 
 int main()
 {
@@ -168,7 +169,7 @@ int eAutomovil_ingreso(eAutomovil listaAutomoviles[], ePropietario listaPropieta
     limiteEstacionados = eAutomovil_validarLimiteEstacionados(listaAutomoviles, LIMITE_AUTOMOVILES);
     if(limiteEstacionados < 0)
     {
-        printf("\nNo hay lugar disponible para estacionar automoviles");
+        printf("\nNo hay lugar disponible para ingresar automoviles");
     }
     else
     {
@@ -241,6 +242,88 @@ int eAutomovil_ingreso(eAutomovil listaAutomoviles[], ePropietario listaPropieta
             }
         } while(indiceAutomovil < 0 && muestraListado == 1);
     }
+
+    return idAutomovil;
+}
+
+int eAutomovil_egreso(eAutomovil[], ePropietario[], eIngreso[], int limiteAutomoviles, int limitePropietarios, int limiteIngresos)
+{
+    int idPropietario;
+    int indicePropietario;
+    int idAutomovil = 0;
+    int indiceAutomovil;
+    int ingresoAutomovil;
+    int limiteEstacionados;
+    int muestraListado;
+
+    do
+    {
+        muestraListado = ePropietario_mostrarListadoConOcupados(listaPropietarios, LIMITE_PROPIETARIOS);
+
+        switch(muestraListado)
+        {
+        case 0:
+            printf("\nNo hay propietarios para hacer ingresos"); //retorno = -2
+            break;
+        case 1:
+            idPropietario = pedirEnteroSinValidar("\nIngrese ID del propietario a hacer el ingreso: ");
+            indicePropietario = ePropietario_buscarPorId(listaPropietarios, LIMITE_PROPIETARIOS, idPropietario);
+            if(indicePropietario < 0)
+            {
+                printf("No se encontro el ID ingresado. Por favor reingrese\n");
+            }
+            break;
+        default:
+            printf("\Error al listar...\n"); //retorno = -2
+            break;
+        }
+    } while(indicePropietario < 0 && muestraListado == 1);
+
+    do
+    {
+        muestraListado = eAutomovil_mostrarListadoPropietario(listaAutomoviles, LIMITE_AUTOMOVILES, idPropietario, listaPropietarios[indicePropietario].nombreApellido);
+
+        switch(muestraListado)
+        {
+        case 0:
+            printf("\nNo hay automoviles para hacer ingresos"); //retorno = -2
+            break;
+        case 1:
+            idAutomovil = pedirEnteroSinValidar("\nIngrese ID del automovil del propietario a hacer el ingreso, o 0 para ingresar un nuevo automovil: ");
+            if(idAutomovil == 0)
+            {
+                ingresoAutomovil = eAutomovil_alta(listaAutomoviles, LIMITE_AUTOMOVILES, idPropietario, listaPropietarios[indicePropietario].nombreApellido);
+                if(ingresoAutomovil == 0)
+                {
+                    indiceAutomovil = eAutomovil_ultimoIngresado(listaAutomoviles, LIMITE_AUTOMOVILES);
+                    idAutomovil = listaAutomoviles[indiceAutomovil].idAutomovil;
+                    printf("\nAlta de automovil OK");
+                }
+                else
+                {
+                    indiceAutomovil = -1;
+                    printf("Por favor reingrese\n");
+                }
+            }
+            else
+            {
+                indiceAutomovil = eAutomovil_buscarPorId(listaAutomoviles, LIMITE_AUTOMOVILES, idAutomovil);
+                if(indiceAutomovil < 0)
+                {
+                    printf("No se encontro el ID ingresado. Por favor reingrese\n");
+                }
+            }
+            break;
+        default:
+            printf("\Error al listar...\n"); //retorno = -2
+            break;
+        }
+
+        if(indiceAutomovil >= 0)
+        {
+            listaAutomoviles[indiceAutomovil].estado = ESTACIONADO;
+        }
+    } while(indiceAutomovil < 0 && muestraListado == 1);
 
     return idAutomovil;
 }

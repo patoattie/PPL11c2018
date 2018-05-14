@@ -1,10 +1,9 @@
 #ifndef EGRESOS_H_INCLUDED
 #define EGRESOS_H_INCLUDED
 
-#define LIMITE_INGRESOS 200
-#define INGRESADO 0
+#define LIMITE_EGRESOS 200
+#define OCUPADO 0
 #define LIBRE 1
-#define RETIRADO 2
 
 typedef struct
 {
@@ -21,6 +20,7 @@ int eEgreso_siguienteId(eEgreso[] ,int limite);
 int eEgreso_buscarLugarLibre(eEgreso listado[],int limite);
 
 int eEgreso_alta(eEgreso[] ,int limite, int idIngreso);
+int devolverHorasEstadia(void);
 
 #endif // EGRESOS_H_INCLUDED
 
