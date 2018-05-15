@@ -129,7 +129,7 @@ int eEgreso_alta(eEgreso listado[], int limite, int idIngreso)
     return retorno;
 }
 
-int devolverHorasEstadia(void)
+int eEgreso_devolverHorasEstadia(void)
 {
     int horas;
 

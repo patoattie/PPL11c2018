@@ -107,33 +107,6 @@ void eIngreso_mostrarUno(eIngreso parametro, char nombrePropietario[], char pate
 
 }
 
-int eIngreso_mostrarListado(eIngreso listado[], int limite, int idPropietario, char nombrePropietario[], int idAutomovil, char patente[], char marca[], float importe)
-{
-    int retorno = -1;
-    int i;
-
-    if(limite > 0 && listado != NULL)
-    {
-        retorno = 0;
-        for(i=0; i<limite; i++)
-        {
-            if(listado[i].estado==INGRESADO && listado[i].idAutomovil == idAutomovil)
-            {
-                retorno = 1;
-
-                //Se muestra al menos un elemento del array
-                eIngreso_mostrarUno(listado[i], nombrePropietario, patente, marca, importe);
-            }
-        }
-
-        if(retorno == 0)
-        {
-            printf("\n*** NO HAY ELEMENTOS PARA MOSTRAR ***");
-        }
-    }
-    return retorno;
-}
-
 int eIngreso_alta(eIngreso listado[], int limite, int idAutomovil)
 {
     int retorno = -1;

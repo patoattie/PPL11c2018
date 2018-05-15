@@ -38,6 +38,6 @@ int eAutomovil_mostrarListadoPropietario(eAutomovil[], int limite, int idPropiet
 int eAutomovil_alta(eAutomovil[], int limite, int idPropietario, char nombrePropietario[]);
 int eAutomovil_egreso(eAutomovil[] ,int limite);
 
-void retornaMarca(int marca, char nombreMarca[]);
+void eAutomovil_retornaMarca(int marca, char nombreMarca[]);
 
 #endif // AUTOMOVILES_H_INCLUDED

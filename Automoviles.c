@@ -181,7 +181,7 @@ void eAutomovil_mostrarUno(eAutomovil parametro, char nombrePropietario[])
 {
     char nombreMarca[TAM_MARCA];
 
-    retornaMarca(parametro.marca, nombreMarca); //Devuelve el nombre de la marca.
+    eAutomovil_retornaMarca(parametro.marca, nombreMarca); //Devuelve el nombre de la marca.
 
     printf("\n %d - %s - %s - %s", parametro.idAutomovil, parametro.patente, nombreMarca, nombrePropietario);
 
@@ -191,7 +191,7 @@ void eAutomovil_mostrarUnoConEstado(eAutomovil parametro, char nombrePropietario
 {
     char nombreMarca[TAM_MARCA];
 
-    retornaMarca(parametro.marca, nombreMarca); //Devuelve el nombre de la marca.
+    eAutomovil_retornaMarca(parametro.marca, nombreMarca); //Devuelve el nombre de la marca.
 
     switch(parametro.estado)
     {
@@ -372,7 +372,7 @@ int ePropietario_baja(ePropietario listado[],int limite)
     return retorno;
 }
 */
-void retornaMarca(int marca, char nombreMarca[])
+void eAutomovil_retornaMarca(int marca, char nombreMarca[])
 {
     switch(marca)
     {

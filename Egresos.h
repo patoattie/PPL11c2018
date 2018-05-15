@@ -20,7 +20,7 @@ int eEgreso_siguienteId(eEgreso[] ,int limite);
 int eEgreso_buscarLugarLibre(eEgreso listado[],int limite);
 
 int eEgreso_alta(eEgreso[] ,int limite, int idIngreso);
-int devolverHorasEstadia(void);
+int eEgreso_devolverHorasEstadia(void);
 
 #endif // EGRESOS_H_INCLUDED
 
