@@ -13,6 +13,10 @@
 #define LIBRE 1
 #define BAJA 2
 #define ESTACIONADO 3
+#define IMPORTE_ALPHA_ROMEO 150
+#define IMPORTE_FERRARI 175
+#define IMPORTE_AUDI 200
+#define IMPORTE_OTRO 250
 
 typedef struct
 {

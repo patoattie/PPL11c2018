@@ -101,9 +101,9 @@ int eIngreso_buscarPorId(eIngreso listado[] ,int limite, int id)
     return retorno;
 }
 
-void eIngreso_mostrarUno(eIngreso parametro, char nombrePropietario[], char patente[], char marca[], float importe)
+void eIngreso_mostrarUno(eIngreso parametro, char nombrePropietario[], char patente[], char marca[])
 {
-    printf("\n %d - %s - %s - %s - %5.2f", parametro.idIngreso, patente, marca, nombrePropietario, importe);
+    printf("\n %d - %s - %s - %s", parametro.idIngreso, patente, marca, nombrePropietario);
 
 }
 

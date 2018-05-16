@@ -103,7 +103,7 @@ int eEgreso_buscarPorId(eEgreso listado[] ,int limite, int id)
     return retorno;
 }
 
-int eEgreso_alta(eEgreso listado[], int limite, int idIngreso)
+int eEgreso_alta(eEgreso listado[], int limite, int idIngreso, int horasEstadia, float importeEstadia)
 {
     int retorno = -1;
     int indice;

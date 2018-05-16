@@ -5,11 +5,13 @@
 #include "Propietarios.h"
 #include "Automoviles.h"
 #include "Ingresos.h"
+#include "Egresos.h"
 
 int eAutomovil_mostrarListado(eAutomovil[], ePropietario[], int limiteAutomoviles, int limitePropietarios);
 int eAutomovil_ingreso(eAutomovil[], ePropietario[], int limiteAutomoviles, int limitePropietarios);
 int eAutomovil_egreso(eAutomovil[], ePropietario[], eIngreso[], int limiteAutomoviles, int limitePropietarios, int limiteIngresos);
 int eIngreso_mostrarListado(eIngreso[], ePropietario[], eIngreso[], int limiteAutomoviles, int limitePropietarios, int limiteIngresos);
+float eEgreso_devolverImporteEstadia(int marca, int horasEstadia);
 
 int main()
 {
@@ -17,16 +19,23 @@ int main()
     int opcion=0;
     int puntoMenu;
     int idAutomovil;
+    int idIngreso;
+    int posicionIngreso;
+    int posicionAutomovil;
+    int horasEstadia;
+    float importeEstadia;
 
     //Declaro array donde guardo los datos de la estructura Propietario
     ePropietario listaPropietarios[LIMITE_PROPIETARIOS];
     eAutomovil listaAutomoviles[LIMITE_AUTOMOVILES];
     eIngreso listaIngresos[LIMITE_INGRESOS];
+    eEgreso listaEgresos[LIMITE_EGRESOS];
 
     //Inicializo el flag de estado junto con hardcodeo de datos
     ePropietario_hardcodeo(listaPropietarios, LIMITE_PROPIETARIOS);
     eAutomovil_hardcodeo(listaAutomoviles, LIMITE_AUTOMOVILES);
     eIngreso_hardcodeo(listaIngresos, LIMITE_INGRESOS);
+    eEgreso_hardcodeo(listaEgresos, LIMITE_EGRESOS);
 
     while(seguir=='s')
     {
@@ -89,13 +98,23 @@ int main()
                 }
                 break;
             case 6:
-                idAutomovil = eAutomovil_egreso(listaAutomoviles, listaPropietarios, listaIngresos, LIMITE_AUTOMOVILES, LIMITE_PROPIETARIOS, LIMITE_INGRESOS);
-                if(idAutomovil > 0)
+                idIngreso = eAutomovil_egreso(listaAutomoviles, listaPropietarios, listaIngresos, LIMITE_AUTOMOVILES, LIMITE_PROPIETARIOS, LIMITE_INGRESOS);
+                if(idIngreso > 0)
                 {
-                    puntoMenu = eEgreso_alta(listaIngresos, LIMITE_INGRESOS, idAutomovil);
-                    if(puntoMenu == 0)
+                    posicionIngreso = eIngreso_buscarPorId(listaIngresos, LIMITE_INGRESOS, idIngreso);
+                    if(posicionIngreso >= 0)
                     {
-                        printf("\nEgreso de automovil OK");
+                        posicionAutomovil = eAutomovil_buscarPorId(listaAutomoviles, LIMITE_AUTOMOVILES, listaIngresos[posicionIngreso].idAutomovil);
+                        if(posicionAutomovil >= 0)
+                        {
+                            horasEstadia = eEgreso_devolverHorasEstadia(void);
+                            importeEstadia = eEgreso_devolverImporteEstadia(listaAutomoviles[posicionAutomovil].marca, horasEstadia);
+                            puntoMenu = eEgreso_alta(listaEgresos, LIMITE_EGRESOS, idIngreso, horasEstadia, importeEstadia);
+                            if(puntoMenu == 0)
+                            {
+                                printf("\nEgreso de automovil OK");
+                            }
+                        }
                     }
                 }
                 else
@@ -256,7 +275,6 @@ int eIngreso_mostrarListado(eIngreso listaIngresos[], ePropietario listaPropieta
     char nombrePropietario[TAM_NOMBRE_APELLIDO];
     char patente[TAM_PATENTE];
     char marca[TAM_MARCA];
-    float importe;
 
     if(limiteIngresos > 0 && listaIngresos != NULL)
     {
@@ -276,10 +294,9 @@ int eIngreso_mostrarListado(eIngreso listaIngresos[], ePropietario listaPropieta
                         strcpy(nombrePropietario, listaPropietarios[posicionPropietario].nombreApellido); //Nombre del Propietario
                         strcpy(patente, listaAutomoviles[posicionAutomovil].patente); //Patente del Automóvil
                         eAutomovil_retornaMarca(listaAutomoviles[posicionAutomovil].marca, marca); //Marca del Automóvil
-                        importe = eEgreso_devolverHorasEstadia(void);
 
                         //Se muestra al menos un elemento del array
-                        eIngreso_mostrarUno(listaIngresos[i], nombrePropietario, patente, marca, importe);
+                        eIngreso_mostrarUno(listaIngresos[i], nombrePropietario, patente, marca);
                     }
                 }
 
@@ -313,7 +330,7 @@ int eAutomovil_egreso(eAutomovil listaAutomoviles[], ePropietario listaPropietar
         switch(muestraListado)
         {
         case 0:
-            printf("\nNo hay propietarios para hacer ingresos"); //retorno = -2
+            printf("\nNo hay propietarios para hacer egresos"); //retorno = -2
             break;
         case 1:
             idIngreso = pedirEnteroSinValidar("\nIngrese ID del ingreso, para efectuar su salida: ");
@@ -329,5 +346,29 @@ int eAutomovil_egreso(eAutomovil listaAutomoviles[], ePropietario listaPropietar
         }
     } while(indiceIngreso < 0 && muestraListado == 1);
 
-    return idAutomovil;
+    return idIngreso;
+}
+
+float eEgreso_devolverImporteEstadia(int marca, int horasEstadia)
+{
+    float importeEstadia;
+
+    switch(marca)
+    {
+    case ALPHA_ROMEO:
+        importeEstadia = IMPORTE_ALPHA_ROMEO;
+        break;
+    case FERRARI:
+        importeEstadia = IMPORTE_FERRARI;
+        break;
+    case AUDI:
+        importeEstadia = IMPORTE_AUDI;
+        break;
+    default:
+        importeEstadia = IMPORTE_OTRO;
+    }
+
+    importeEstadia = importeEstadia * (float)horasEstadia;
+
+    return importeEstadia;
 }

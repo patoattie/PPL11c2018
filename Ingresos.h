@@ -19,7 +19,7 @@ int eIngreso_buscarPorId(eIngreso[] ,int limite, int id);
 int eIngreso_siguienteId(eIngreso[] ,int limite);
 int eIngreso_buscarLugarLibre(eIngreso listado[],int limite);
 
-void eIngreso_mostrarUno(eIngreso parametro, char nombrePropietario[], char patente[], char marca[], float importe);
+void eIngreso_mostrarUno(eIngreso parametro, char nombrePropietario[], char patente[], char marca[]);
 
 int eIngreso_alta(eIngreso[] ,int limite, int idAutomovil);
 
