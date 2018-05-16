@@ -13,10 +13,6 @@
 #define LIBRE 1
 #define BAJA 2
 #define ESTACIONADO 3
-#define IMPORTE_ALPHA_ROMEO 150
-#define IMPORTE_FERRARI 175
-#define IMPORTE_AUDI 200
-#define IMPORTE_OTRO 250
 
 typedef struct
 {
@@ -40,7 +36,6 @@ void eAutomovil_mostrarUnoConEstado(eAutomovil parametro, char nombrePropietario
 int eAutomovil_mostrarListadoPropietario(eAutomovil[], int limite, int idPropietario, char nombrePropietario[]);
 
 int eAutomovil_alta(eAutomovil[], int limite, int idPropietario, char nombrePropietario[]);
-int eAutomovil_egreso(eAutomovil[] ,int limite);
 
 void eAutomovil_retornaMarca(int marca, char nombreMarca[]);
 

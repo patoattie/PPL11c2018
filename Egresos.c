@@ -17,22 +17,6 @@ void eEgreso_init(eEgreso listado[],int limite)
     }
 }
 
-void eEgreso_hardcodeo(eEgreso listado[],int limite)
-{
-    int i;
-    int id[10]= {1,2,3,4,5,6,7,8,9,10};
-    float importe[10]= {100,200,100,300,100,100,200,200,100,100};
-
-    eEgreso_init(listado, limite);
-
-    for(i = 0; i < 10; i++)
-    {
-        listado[i].idEgreso = id[i];
-        listado[i].idIngreso = id[i];
-        listado[i].importe = importe[i];
-        listado[i].estado = INGRESADO;
-    }
-}
 int eEgreso_buscarLugarLibre(eEgreso listado[],int limite)
 {
     int retorno = -1;
@@ -103,7 +87,14 @@ int eEgreso_buscarPorId(eEgreso listado[] ,int limite, int id)
     return retorno;
 }
 
-int eEgreso_alta(eEgreso listado[], int limite, int idIngreso, int horasEstadia, float importeEstadia)
+void eEgreso_mostrarTicket(int horasEstadia, float precioEstadia)
+{
+    float importeEstadia = (float)horasEstadia * precioEstadia;
+    printf("\nHoras de Estadia: %d\nPrecio por hora: %5.2f\nImporte a abonar: %5.2f", horasEstadia, precioEstadia, importeEstadia);
+
+}
+
+int eEgreso_alta(eEgreso listado[], int limite, int idIngreso, int horasEstadia, float precioEstadia)
 {
     int retorno = -1;
     int indice;
@@ -115,10 +106,12 @@ int eEgreso_alta(eEgreso listado[], int limite, int idIngreso, int horasEstadia,
         indice = eEgreso_buscarLugarLibre(listado,limite);
         if(indice >= 0)
         {
-            retorno = 0;
-            //OK
+            retorno = 0; //OK
+            eEgreso_mostrarTicket(horasEstadia, precioEstadia);
+            pausarEjecucion();
             listado[indice].idEgreso = eEgreso_siguienteId(listado,limite);
             listado[indice].idIngreso = idIngreso;
+            listado[indice].importe = (float)horasEstadia * precioEstadia;
             listado[indice].estado = OCUPADO;
         }
         else //retorno = -2

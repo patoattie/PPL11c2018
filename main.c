@@ -10,8 +10,10 @@
 int eAutomovil_mostrarListado(eAutomovil[], ePropietario[], int limiteAutomoviles, int limitePropietarios);
 int eAutomovil_ingreso(eAutomovil[], ePropietario[], int limiteAutomoviles, int limitePropietarios);
 int eAutomovil_egreso(eAutomovil[], ePropietario[], eIngreso[], int limiteAutomoviles, int limitePropietarios, int limiteIngresos);
-int eIngreso_mostrarListado(eIngreso[], ePropietario[], eIngreso[], int limiteAutomoviles, int limitePropietarios, int limiteIngresos);
-float eEgreso_devolverImporteEstadia(int marca, int horasEstadia);
+int eIngreso_mostrarListado(eIngreso[], ePropietario[], eAutomovil[], int limiteAutomoviles, int limitePropietarios, int limiteIngresos);
+float eEgreso_devolverPrecioEstadia(int marca);
+void eIngreso_hardcodeo(eIngreso[], eAutomovil[], int limiteIngresos, int limiteAutomoviles);
+void eEgreso_hardcodeo(eEgreso[], eIngreso[], eAutomovil[], int limiteEgresos, int limiteIngresos, int limiteAutomoviles);
 
 int main()
 {
@@ -23,7 +25,7 @@ int main()
     int posicionIngreso;
     int posicionAutomovil;
     int horasEstadia;
-    float importeEstadia;
+    float precioEstadia;
 
     //Declaro array donde guardo los datos de la estructura Propietario
     ePropietario listaPropietarios[LIMITE_PROPIETARIOS];
@@ -34,8 +36,8 @@ int main()
     //Inicializo el flag de estado junto con hardcodeo de datos
     ePropietario_hardcodeo(listaPropietarios, LIMITE_PROPIETARIOS);
     eAutomovil_hardcodeo(listaAutomoviles, LIMITE_AUTOMOVILES);
-    eIngreso_hardcodeo(listaIngresos, LIMITE_INGRESOS);
-    eEgreso_hardcodeo(listaEgresos, LIMITE_EGRESOS);
+    eIngreso_hardcodeo(listaIngresos, listaAutomoviles, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
+    eEgreso_hardcodeo(listaEgresos, listaIngresos, listaAutomoviles, LIMITE_EGRESOS, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
 
     while(seguir=='s')
     {
@@ -107,11 +109,12 @@ int main()
                         posicionAutomovil = eAutomovil_buscarPorId(listaAutomoviles, LIMITE_AUTOMOVILES, listaIngresos[posicionIngreso].idAutomovil);
                         if(posicionAutomovil >= 0)
                         {
-                            horasEstadia = eEgreso_devolverHorasEstadia(void);
-                            importeEstadia = eEgreso_devolverImporteEstadia(listaAutomoviles[posicionAutomovil].marca, horasEstadia);
-                            puntoMenu = eEgreso_alta(listaEgresos, LIMITE_EGRESOS, idIngreso, horasEstadia, importeEstadia);
+                            horasEstadia = eEgreso_devolverHorasEstadia();
+                            precioEstadia = eEgreso_devolverPrecioEstadia(listaAutomoviles[posicionAutomovil].marca);
+                            puntoMenu = eEgreso_alta(listaEgresos, LIMITE_EGRESOS, idIngreso, horasEstadia, precioEstadia);
                             if(puntoMenu == 0)
                             {
+                                listaAutomoviles[posicionAutomovil].estado = NO_ESTACIONADO;
                                 printf("\nEgreso de automovil OK");
                             }
                         }
@@ -256,11 +259,9 @@ int eAutomovil_ingreso(eAutomovil listaAutomoviles[], ePropietario listaPropieta
                 break;
             }
 
-            if(indiceAutomovil >= 0)
-            {
-                listaAutomoviles[indiceAutomovil].estado = ESTACIONADO;
-            }
         } while(indiceAutomovil < 0 && muestraListado == 1);
+
+        listaAutomoviles[indiceAutomovil].estado = ESTACIONADO;
     }
 
     return idAutomovil;
@@ -313,14 +314,8 @@ int eIngreso_mostrarListado(eIngreso listaIngresos[], ePropietario listaPropieta
 
 int eAutomovil_egreso(eAutomovil listaAutomoviles[], ePropietario listaPropietarios[], eIngreso listaIngresos[], int limiteAutomoviles, int limitePropietarios, int limiteIngresos)
 {
-    int idPropietario;
-    int indicePropietario;
-    int idAutomovil = 0;
-    int indiceAutomovil;
     int idIngreso;
     int indiceIngreso;
-    int ingresoAutomovil;
-    int limiteEstacionados;
     int muestraListado;
 
     do
@@ -346,29 +341,74 @@ int eAutomovil_egreso(eAutomovil listaAutomoviles[], ePropietario listaPropietar
         }
     } while(indiceIngreso < 0 && muestraListado == 1);
 
+    listaIngresos[indiceIngreso].estado = RETIRADO;
+
     return idIngreso;
 }
 
-float eEgreso_devolverImporteEstadia(int marca, int horasEstadia)
+
+float eEgreso_devolverPrecioEstadia(int marca)
 {
-    float importeEstadia;
+    float precioEstadia;
 
     switch(marca)
     {
     case ALPHA_ROMEO:
-        importeEstadia = IMPORTE_ALPHA_ROMEO;
+        precioEstadia = IMPORTE_ALPHA_ROMEO;
         break;
     case FERRARI:
-        importeEstadia = IMPORTE_FERRARI;
+        precioEstadia = IMPORTE_FERRARI;
         break;
     case AUDI:
-        importeEstadia = IMPORTE_AUDI;
+        precioEstadia = IMPORTE_AUDI;
         break;
     default:
-        importeEstadia = IMPORTE_OTRO;
+        precioEstadia = IMPORTE_OTRO;
     }
 
-    importeEstadia = importeEstadia * (float)horasEstadia;
+    return precioEstadia;
+}
 
-    return importeEstadia;
+void eIngreso_hardcodeo(eIngreso listaIngresos[], eAutomovil listaAutomoviles[], int limiteIngresos, int limiteAutomoviles)
+{
+    int i;
+    int id[10]= {1,2,3,4,5,6,7,8,9,10};
+    int posicionAutomovil;
+
+    eIngreso_init(listaIngresos, limiteIngresos);
+
+    for(i = 0; i < 10; i++)
+    {
+        listaIngresos[i].idIngreso = id[i];
+        listaIngresos[i].idAutomovil = id[i];
+        listaIngresos[i].estado = INGRESADO;
+        //Cambio estado en la entidad Automovil
+        posicionAutomovil = eAutomovil_buscarPorId(listaAutomoviles, limiteAutomoviles, listaIngresos[i].idAutomovil);
+        listaAutomoviles[posicionAutomovil].estado = ESTACIONADO;
+    }
+}
+
+void eEgreso_hardcodeo(eEgreso listaEgresos[], eIngreso listaIngresos[], eAutomovil listaAutomoviles[], int limiteEgresos, int limiteIngresos, int limiteAutomoviles)
+{
+    int i;
+    int id[10]= {1,2,3,4,5,6,7,8,9,10};
+    float importe[10]= {100,200,100,300,100,100,200,200,100,100};
+    int posicionIngreso;
+    int posicionAutomovil;
+
+    eEgreso_init(listaEgresos, limiteEgresos);
+
+    for(i = 0; i < 10; i++)
+    {
+        listaEgresos[i].idEgreso = id[i];
+        listaEgresos[i].idIngreso = id[i];
+        listaEgresos[i].importe = importe[i];
+        listaEgresos[i].estado = OCUPADO;
+        //Cambio estado en la entidad Ingreso
+        posicionIngreso = eIngreso_buscarPorId(listaIngresos, limiteIngresos, listaEgresos[i].idIngreso);
+        listaIngresos[posicionIngreso].estado = RETIRADO;
+        //Cambio estado en la entidad Automovil
+        posicionAutomovil = eAutomovil_buscarPorId(listaAutomoviles, limiteAutomoviles, listaIngresos[posicionIngreso].idAutomovil);
+        listaAutomoviles[posicionAutomovil].estado = NO_ESTACIONADO;
+    }
 }

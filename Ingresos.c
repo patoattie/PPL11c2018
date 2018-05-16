@@ -17,20 +17,6 @@ void eIngreso_init(eIngreso listado[],int limite)
     }
 }
 
-void eIngreso_hardcodeo(eIngreso listado[],int limite)
-{
-    int i;
-    int id[10]= {1,2,3,4,5,6,7,8,9,10};
-
-    eIngreso_init(listado, limite);
-
-    for(i = 0; i < 10; i++)
-    {
-        listado[i].idIngreso = id[i];
-        listado[i].idAutomovil = id[i];
-        listado[i].estado = INGRESADO;
-    }
-}
 int eIngreso_buscarLugarLibre(eIngreso listado[],int limite)
 {
     int retorno = -1;
