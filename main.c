@@ -112,7 +112,7 @@ int main()
                     posicionIngreso = eIngreso_buscarPorId(listaIngresos, LIMITE_INGRESOS, idIngreso);
                     if(posicionIngreso >= 0)
                     {
-                        posicionAutomovil = eAutomovil_buscarPorId(listaAutomoviles, LIMITE_AUTOMOVILES, listaIngresos[posicionIngreso].idAutomovil);
+                        posicionAutomovil = eAutomovil_buscarPorIdEstacionados(listaAutomoviles, LIMITE_AUTOMOVILES, listaIngresos[posicionIngreso].idAutomovil);
                         if(posicionAutomovil >= 0)
                         {
                             posicionPropietario = ePropietario_buscarPorId(listaPropietarios, LIMITE_PROPIETARIOS, listaAutomoviles[posicionAutomovil].idPropietario);
