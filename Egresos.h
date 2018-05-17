@@ -22,9 +22,9 @@ int eEgreso_buscarPorId(eEgreso[] ,int limite, int id);
 int eEgreso_siguienteId(eEgreso[] ,int limite);
 int eEgreso_buscarLugarLibre(eEgreso listado[],int limite);
 
-void eEgreso_mostrarTicket(int horasEstadia, float precioEstadia);
+void eEgreso_mostrarTicket(char nombrePropietario[], char patenteAutomovil[], char marcaAutomovil[], int horasEstadia, float precioEstadia);
 
-int eEgreso_alta(eEgreso[] ,int limite, int idIngreso, int horasEstadia, float precioEstadia);
+int eEgreso_alta(eEgreso[] ,int limite, int idIngreso, char nombrePropietario[], char patenteAutomovil[], char marcaAutomovil[], int horasEstadia, float precioEstadia);
 int eEgreso_devolverHorasEstadia(void);
 
 #endif // EGRESOS_H_INCLUDED

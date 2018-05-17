@@ -87,14 +87,14 @@ int eEgreso_buscarPorId(eEgreso listado[] ,int limite, int id)
     return retorno;
 }
 
-void eEgreso_mostrarTicket(int horasEstadia, float precioEstadia)
+void eEgreso_mostrarTicket(char nombrePropietario[], char patenteAutomovil[], char marcaAutomovil[], int horasEstadia, float precioEstadia)
 {
     float importeEstadia = (float)horasEstadia * precioEstadia;
-    printf("\nHoras de Estadia: %d\nPrecio por hora: %5.2f\nImporte a abonar: %5.2f", horasEstadia, precioEstadia, importeEstadia);
+    printf("\nNombre del Propietario: %s\nPatente del Automovil: %s\nMarca del Automovil: %s\nValor de la Estadia: %5.2f", nombrePropietario, patenteAutomovil, marcaAutomovil, importeEstadia);
 
 }
 
-int eEgreso_alta(eEgreso listado[], int limite, int idIngreso, int horasEstadia, float precioEstadia)
+int eEgreso_alta(eEgreso listado[], int limite, int idIngreso, char nombrePropietario[], char patenteAutomovil[], char marcaAutomovil[], int horasEstadia, float precioEstadia)
 {
     int retorno = -1;
     int indice;
@@ -107,7 +107,7 @@ int eEgreso_alta(eEgreso listado[], int limite, int idIngreso, int horasEstadia,
         if(indice >= 0)
         {
             retorno = 0; //OK
-            eEgreso_mostrarTicket(horasEstadia, precioEstadia);
+            eEgreso_mostrarTicket(nombrePropietario, patenteAutomovil, marcaAutomovil, horasEstadia, precioEstadia);
             pausarEjecucion();
             listado[indice].idEgreso = eEgreso_siguienteId(listado,limite);
             listado[indice].idIngreso = idIngreso;

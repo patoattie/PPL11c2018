@@ -26,6 +26,7 @@ typedef struct
 void eAutomovil_init(eAutomovil[],int limite);
 void eAutomovil_hardcodeo(eAutomovil[],int limite);
 int eAutomovil_buscarPorId(eAutomovil[] ,int limite, int id);
+int eAutomovil_buscarPorIdEstacionados(eAutomovil[] ,int limite, int id);
 int eAutomovil_siguienteId(eAutomovil[] ,int limite);
 int eAutomovil_ultimoIngresado(eAutomovil[],int limite);
 int eAutomovil_buscarLugarLibre(eAutomovil[],int limite);

@@ -9,27 +9,27 @@
 	</File>
 	<File name="Automoviles.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="0" topLine="18" />
+			<Cursor1 position="0" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="Automoviles.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1258" topLine="0" />
+			<Cursor1 position="682" topLine="6" />
 		</Cursor>
 	</File>
 	<File name="Egresos.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="399" topLine="0" />
+			<Cursor1 position="2955" topLine="78" />
 		</Cursor>
 	</File>
 	<File name="Egresos.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="388" topLine="0" />
+			<Cursor1 position="557" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="Ingresos.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="402" topLine="9" />
+			<Cursor1 position="402" topLine="57" />
 		</Cursor>
 	</File>
 	<File name="Ingresos.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -49,7 +49,7 @@
 	</File>
 	<File name="main.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="13673" topLine="136" />
+			<Cursor1 position="10246" topLine="234" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

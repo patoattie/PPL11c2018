@@ -151,6 +151,26 @@ int eAutomovil_buscarPorId(eAutomovil listado[] ,int limite, int id)
     return retorno;
 }
 
+int eAutomovil_buscarPorIdEstacionados(eAutomovil listado[] ,int limite, int id)
+{
+    int retorno = -1;
+    int i;
+    if(limite > 0 && listado != NULL)
+    {
+        retorno = -2;
+        for(i=0;i<limite;i++)
+        {
+            if(listado[i].estado == ESTACIONADO && listado[i].idAutomovil == id)
+            {
+                retorno = i;
+                //Hallé el elemento que buscaba y retorno su indice
+                break;
+            }
+        }
+    }
+    return retorno;
+}
+
 int eAutomovil_validarLimiteEstacionados(eAutomovil listado[],int limite)
 {
     int retorno = -1;

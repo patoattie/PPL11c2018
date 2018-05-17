@@ -24,8 +24,12 @@ int main()
     int idIngreso;
     int posicionIngreso;
     int posicionAutomovil;
+    int posicionPropietario;
     int horasEstadia;
     float precioEstadia;
+    char nombrePropietario[TAM_NOMBRE_APELLIDO];
+    char marcaAutomovil[TAM_MARCA];
+    char patenteAutomovil[TAM_PATENTE];
 
     //Declaro array donde guardo los datos de la estructura Propietario
     ePropietario listaPropietarios[LIMITE_PROPIETARIOS];
@@ -109,13 +113,21 @@ int main()
                         posicionAutomovil = eAutomovil_buscarPorId(listaAutomoviles, LIMITE_AUTOMOVILES, listaIngresos[posicionIngreso].idAutomovil);
                         if(posicionAutomovil >= 0)
                         {
-                            horasEstadia = eEgreso_devolverHorasEstadia();
-                            precioEstadia = eEgreso_devolverPrecioEstadia(listaAutomoviles[posicionAutomovil].marca);
-                            puntoMenu = eEgreso_alta(listaEgresos, LIMITE_EGRESOS, idIngreso, horasEstadia, precioEstadia);
-                            if(puntoMenu == 0)
+                            posicionPropietario = ePropietario_buscarPorId(listaPropietarios, LIMITE_PROPIETARIOS, listaAutomoviles[posicionAutomovil].idPropietario);
+                            if(posicionPropietario >= 0)
                             {
-                                listaAutomoviles[posicionAutomovil].estado = NO_ESTACIONADO;
-                                printf("\nEgreso de automovil OK");
+                                strcpy(nombrePropietario, listaPropietarios[posicionPropietario].nombreApellido);
+                                strcpy(patenteAutomovil, listaAutomoviles[posicionAutomovil].patente);
+                                eAutomovil_retornaMarca(listaAutomoviles[posicionAutomovil].marca, marcaAutomovil);
+                                horasEstadia = eEgreso_devolverHorasEstadia();
+                                precioEstadia = eEgreso_devolverPrecioEstadia(listaAutomoviles[posicionAutomovil].marca);
+                                puntoMenu = eEgreso_alta(listaEgresos, LIMITE_EGRESOS, idIngreso, nombrePropietario, patenteAutomovil, marcaAutomovil, horasEstadia, precioEstadia);
+                                if(puntoMenu == 0)
+                                {
+                                    listaAutomoviles[posicionAutomovil].estado = NO_ESTACIONADO;
+                                    listaIngresos[posicionIngreso].estado = RETIRADO;
+                                    printf("\nEgreso de automovil OK");
+                                }
                             }
                         }
                     }
@@ -223,45 +235,47 @@ int eAutomovil_ingreso(eAutomovil listaAutomoviles[], ePropietario listaPropieta
         {
             muestraListado = eAutomovil_mostrarListadoPropietario(listaAutomoviles, LIMITE_AUTOMOVILES, idPropietario, listaPropietarios[indicePropietario].nombreApellido);
 
-            switch(muestraListado)
+            if(muestraListado == 1)
             {
-            case 0:
-                printf("\nNo hay automoviles para hacer ingresos"); //retorno = -2
-                break;
-            case 1:
                 idAutomovil = pedirEnteroSinValidar("\nIngrese ID del automovil del propietario a hacer el ingreso, o 0 para ingresar un nuevo automovil: ");
-                if(idAutomovil == 0)
+            }
+            else
+            {
+                printf("\n"); //Hago retorno de carro para separar mensajes en pantalla en caso que no haya automóviles
+            }
+
+            /*
+            Si el propietario ya tiene automóviles ingresados pero quiere ingresar uno nuevo
+            ==> el if entra por idAutomovil == 0
+            Pero si el propietario no tiene ningún automóvil ingresado el sistema va a pedir directamente
+            que el operador ingrese un automóvil para el propietario
+            ==> el if entra por muestraListado == 0 ya que dicha función devuelve cero si no hay automóviles para mostrar
+            */
+            if(idAutomovil == 0 || muestraListado == 0)
+            {
+                ingresoAutomovil = eAutomovil_alta(listaAutomoviles, LIMITE_AUTOMOVILES, idPropietario, listaPropietarios[indicePropietario].nombreApellido);
+                if(ingresoAutomovil == 0)
                 {
-                    ingresoAutomovil = eAutomovil_alta(listaAutomoviles, LIMITE_AUTOMOVILES, idPropietario, listaPropietarios[indicePropietario].nombreApellido);
-                    if(ingresoAutomovil == 0)
-                    {
-                        indiceAutomovil = eAutomovil_ultimoIngresado(listaAutomoviles, LIMITE_AUTOMOVILES);
-                        idAutomovil = listaAutomoviles[indiceAutomovil].idAutomovil;
-                        printf("\nAlta de automovil OK");
-                    }
-                    else
-                    {
-                        indiceAutomovil = -1;
-                        printf("Por favor reingrese\n");
-                    }
+                    indiceAutomovil = eAutomovil_ultimoIngresado(listaAutomoviles, LIMITE_AUTOMOVILES);
+                    idAutomovil = listaAutomoviles[indiceAutomovil].idAutomovil;
+                    listaAutomoviles[indiceAutomovil].estado = ESTACIONADO;
+                    printf("\nAlta de automovil OK");
                 }
                 else
                 {
-                    indiceAutomovil = eAutomovil_buscarPorId(listaAutomoviles, LIMITE_AUTOMOVILES, idAutomovil);
-                    if(indiceAutomovil < 0)
-                    {
-                        printf("No se encontro el ID ingresado. Por favor reingrese\n");
-                    }
+                    indiceAutomovil = -1;
+                    printf("Por favor reingrese\n");
                 }
-                break;
-            default:
-                printf("\Error al listar...\n"); //retorno = -2
-                break;
             }
-
+            else
+            {
+                indiceAutomovil = eAutomovil_buscarPorId(listaAutomoviles, LIMITE_AUTOMOVILES, idAutomovil);
+                if(indiceAutomovil < 0)
+                {
+                    printf("No se encontro el ID ingresado. Por favor reingrese\n");
+                }
+            }
         } while(indiceAutomovil < 0 && muestraListado == 1);
-
-        listaAutomoviles[indiceAutomovil].estado = ESTACIONADO;
     }
 
     return idAutomovil;
@@ -341,8 +355,6 @@ int eAutomovil_egreso(eAutomovil listaAutomoviles[], ePropietario listaPropietar
         }
     } while(indiceIngreso < 0 && muestraListado == 1);
 
-    listaIngresos[indiceIngreso].estado = RETIRADO;
-
     return idIngreso;
 }
 
@@ -408,7 +420,7 @@ void eEgreso_hardcodeo(eEgreso listaEgresos[], eIngreso listaIngresos[], eAutomo
         posicionIngreso = eIngreso_buscarPorId(listaIngresos, limiteIngresos, listaEgresos[i].idIngreso);
         listaIngresos[posicionIngreso].estado = RETIRADO;
         //Cambio estado en la entidad Automovil
-        posicionAutomovil = eAutomovil_buscarPorId(listaAutomoviles, limiteAutomoviles, listaIngresos[posicionIngreso].idAutomovil);
+        posicionAutomovil = eAutomovil_buscarPorIdEstacionados(listaAutomoviles, limiteAutomoviles, listaIngresos[posicionIngreso].idAutomovil);
         listaAutomoviles[posicionAutomovil].estado = NO_ESTACIONADO;
     }
 }
