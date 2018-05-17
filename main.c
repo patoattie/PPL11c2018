@@ -92,9 +92,11 @@ int main()
                 idAutomovil = eAutomovil_ingreso(listaAutomoviles, listaPropietarios, LIMITE_AUTOMOVILES, LIMITE_PROPIETARIOS);
                 if(idAutomovil > 0)
                 {
+                    posicionAutomovil = eAutomovil_buscarPorId(listaAutomoviles, LIMITE_AUTOMOVILES, idAutomovil);
                     puntoMenu = eIngreso_alta(listaIngresos, LIMITE_INGRESOS, idAutomovil);
                     if(puntoMenu == 0)
                     {
+                        listaAutomoviles[posicionAutomovil].estado = ESTACIONADO;
                         printf("\nIngreso de automovil OK");
                     }
                 }
@@ -258,7 +260,6 @@ int eAutomovil_ingreso(eAutomovil listaAutomoviles[], ePropietario listaPropieta
                 {
                     indiceAutomovil = eAutomovil_ultimoIngresado(listaAutomoviles, LIMITE_AUTOMOVILES);
                     idAutomovil = listaAutomoviles[indiceAutomovil].idAutomovil;
-                    listaAutomoviles[indiceAutomovil].estado = ESTACIONADO;
                     printf("\nAlta de automovil OK");
                 }
                 else
@@ -299,7 +300,7 @@ int eIngreso_mostrarListado(eIngreso listaIngresos[], ePropietario listaPropieta
             if(listaIngresos[i].estado==INGRESADO)
             {
                 //Busco el ID del Automóvil en la entidad correspondiente
-                posicionAutomovil = eAutomovil_buscarPorId(listaAutomoviles, limiteAutomoviles, listaIngresos[i].idAutomovil);
+                posicionAutomovil = eAutomovil_buscarPorIdEstacionados(listaAutomoviles, limiteAutomoviles, listaIngresos[i].idAutomovil);
                 if(posicionAutomovil >= 0) //Si encuentro el ID del Automóvil
                 {
                     posicionPropietario = ePropietario_buscarPorId(listaPropietarios, limitePropietarios, listaAutomoviles[posicionAutomovil].idPropietario);

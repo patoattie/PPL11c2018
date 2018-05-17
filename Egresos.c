@@ -90,7 +90,7 @@ int eEgreso_buscarPorId(eEgreso listado[] ,int limite, int id)
 void eEgreso_mostrarTicket(char nombrePropietario[], char patenteAutomovil[], char marcaAutomovil[], int horasEstadia, float precioEstadia)
 {
     float importeEstadia = (float)horasEstadia * precioEstadia;
-    printf("\nNombre del Propietario: %s\nPatente del Automovil: %s\nMarca del Automovil: %s\nValor de la Estadia: %5.2f", nombrePropietario, patenteAutomovil, marcaAutomovil, importeEstadia);
+    printf("\nNombre del Propietario: %s\nPatente del Automovil: %s\nMarca del Automovil: %s\nValor de la Estadia: %5.2f\n", nombrePropietario, patenteAutomovil, marcaAutomovil, importeEstadia);
 
 }
 

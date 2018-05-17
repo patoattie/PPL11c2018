@@ -93,3 +93,58 @@
 
 1526558871 f:\mis documentos\escritorio\programacion\utn\programacion 1\ppl11c2018\egresos.h
 
+1525578067 source:c:\users\pattie\documents\utn\programacion-i\pattie\funciones\funciones.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"funciones.h"
+
+1525578067 c:\users\pattie\documents\utn\programacion-i\pattie\funciones\funciones.h
+
+1526559812 source:c:\users\pattie\documents\utn\ppl11c2018\automoviles.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../Programacion-I/pattie/Funciones/funciones.h"
+	"Automoviles.h"
+
+1526559812 c:\users\pattie\documents\utn\ppl11c2018\automoviles.h
+
+1526559812 source:c:\users\pattie\documents\utn\ppl11c2018\ingresos.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../Programacion-I/pattie/Funciones/funciones.h"
+	"Ingresos.h"
+
+1526559812 c:\users\pattie\documents\utn\ppl11c2018\ingresos.h
+
+1526576478 source:c:\users\pattie\documents\utn\ppl11c2018\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../Programacion-I/pattie/Funciones/funciones.h"
+	"Propietarios.h"
+	"Automoviles.h"
+	"Ingresos.h"
+	"Egresos.h"
+
+1526559812 c:\users\pattie\documents\utn\ppl11c2018\propietarios.h
+
+1526559812 c:\users\pattie\documents\utn\ppl11c2018\egresos.h
+
+1526559812 source:c:\users\pattie\documents\utn\ppl11c2018\propietarios.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../Programacion-I/pattie/Funciones/funciones.h"
+	"Propietarios.h"
+
+1526574893 source:c:\users\pattie\documents\utn\ppl11c2018\egresos.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"../Programacion-I/pattie/Funciones/funciones.h"
+	"Egresos.h"
+
