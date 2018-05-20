@@ -15,6 +15,7 @@ float eEgreso_devolverPrecioEstadia(int marca);
 void eIngreso_hardcodeo(eIngreso[], eAutomovil[], int limiteIngresos, int limiteAutomoviles);
 void eEgreso_hardcodeo(eEgreso[], eIngreso[], eAutomovil[], int limiteEgresos, int limiteIngresos, int limiteAutomoviles);
 int ePropietario_baja(ePropietario[], eEgreso[], eIngreso[], eAutomovil[], int limitePropietarios, int limiteEgresos, int limiteIngresos, int limiteAutomoviles);
+float recaudacionMarca(int idMarca, eAutomovil[], eIngreso[], eEgreso[], int limiteAutomoviles, int limiteIngresos, int limiteEgresos);
 
 int main()
 {
@@ -31,6 +32,8 @@ int main()
     char nombrePropietario[TAM_NOMBRE_APELLIDO];
     char marcaAutomovil[TAM_MARCA];
     char patenteAutomovil[TAM_PATENTE];
+    float importeTotal;
+    int i;
 
     //Declaro array donde guardo los datos de la estructura Propietario
     ePropietario listaPropietarios[LIMITE_PROPIETARIOS];
@@ -42,21 +45,23 @@ int main()
     ePropietario_hardcodeo(listaPropietarios, LIMITE_PROPIETARIOS);
     eAutomovil_hardcodeo(listaAutomoviles, LIMITE_AUTOMOVILES);
     eIngreso_hardcodeo(listaIngresos, listaAutomoviles, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
-    eEgreso_init(listaEgresos, LIMITE_EGRESOS);
-    //eEgreso_hardcodeo(listaEgresos, listaIngresos, listaAutomoviles, LIMITE_EGRESOS, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
+    //eEgreso_init(listaEgresos, LIMITE_EGRESOS);
+    eEgreso_hardcodeo(listaEgresos, listaIngresos, listaAutomoviles, LIMITE_EGRESOS, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
 
     while(seguir=='s')
     {
         limpiarPantalla();
 
-        printf("1- Alta de propietario\n");
-        printf("2- Modificacion de propietario\n");
-        printf("3- Baja de propietario\n");
-        printf("4- Listado de propietarios\n");
-        printf("5- Ingreso de automovil\n");
-        printf("6- Egreso de automovil\n");
-        printf("7- Listado de automoviles\n\n");
-        printf("9- Salir\n");
+        printf(" 1- Alta de propietario\n");
+        printf(" 2- Modificacion de propietario\n");
+        printf(" 3- Baja de propietario\n");
+        printf(" 4- Listado de propietarios\n");
+        printf(" 5- Ingreso de automovil\n");
+        printf(" 6- Egreso de automovil\n");
+        printf(" 7- Listado de automoviles\n");
+        printf(" 8- Recaudacion Total\n");
+        printf(" 9- Recaudacion Total por Marca\n\n");
+        printf("10- Salir\n");
 
         scanf("%d",&opcion);
 
@@ -148,7 +153,25 @@ int main()
                     printf("\nListado de automoviles OK");
                 }
                 break;
+            case 8:
+                importeTotal = 0.0;
+
+                for(i = 0; i < 4; i++)
+                {
+                    importeTotal = importeTotal + recaudacionMarca(i + 1, listaAutomoviles, listaIngresos, listaEgresos, LIMITE_AUTOMOVILES, LIMITE_INGRESOS, LIMITE_EGRESOS);
+                }
+                printf("\nRecaudacion Total del Estacionamiento: %5.2f", importeTotal);
+                break;
             case 9:
+                for(i = 0; i < 4; i++)
+                {
+                    importeTotal = 0.0;
+                    importeTotal = importeTotal + recaudacionMarca(i + 1, listaAutomoviles, listaIngresos, listaEgresos, LIMITE_AUTOMOVILES, LIMITE_INGRESOS, LIMITE_EGRESOS);
+                    eAutomovil_retornaMarca(i + 1, marcaAutomovil);
+                    printf("\nRecaudacion %s: %5.2f", marcaAutomovil, importeTotal);
+                }
+                break;
+            case 10:
                 seguir = 'n';
                 break;
             default:
@@ -523,4 +546,37 @@ int ePropietario_baja(ePropietario listaPropietarios[], eEgreso listaEgresos[], 
     }
 
     return retorno;
+}
+
+float recaudacionMarca(int idMarca, eAutomovil listaAutomoviles[], eIngreso listaIngresos[], eEgreso listaEgresos[], int limiteAutomoviles, int limiteIngresos, int limiteEgresos)
+{
+    float importeTotal = 0.0;
+    int i;
+    int j;
+    int k;
+
+    if(limiteAutomoviles > 0 && listaAutomoviles != NULL)
+    {
+        for(i = 0; i < limiteAutomoviles; i++)
+        {
+            if(listaAutomoviles[i].marca == idMarca)
+            {
+                for(j = 0; j < limiteIngresos; j++)
+                {
+                    if(listaIngresos[j].idAutomovil == listaAutomoviles[i].idAutomovil)
+                    {
+                        for(k = 0; k < limiteEgresos; k++)
+                        {
+                            if(listaEgresos[k].idIngreso == listaIngresos[j].idIngreso)
+                            {
+                                importeTotal = importeTotal + listaEgresos[k].importe;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return importeTotal;
 }
