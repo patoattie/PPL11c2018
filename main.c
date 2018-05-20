@@ -14,6 +14,7 @@ int eIngreso_mostrarListado(eIngreso[], ePropietario[], eAutomovil[], int limite
 float eEgreso_devolverPrecioEstadia(int marca);
 void eIngreso_hardcodeo(eIngreso[], eAutomovil[], int limiteIngresos, int limiteAutomoviles);
 void eEgreso_hardcodeo(eEgreso[], eIngreso[], eAutomovil[], int limiteEgresos, int limiteIngresos, int limiteAutomoviles);
+int ePropietario_baja(ePropietario[], eEgreso[], eIngreso[], eAutomovil[], int limitePropietarios, int limiteEgresos, int limiteIngresos, int limiteAutomoviles);
 
 int main()
 {
@@ -41,7 +42,8 @@ int main()
     ePropietario_hardcodeo(listaPropietarios, LIMITE_PROPIETARIOS);
     eAutomovil_hardcodeo(listaAutomoviles, LIMITE_AUTOMOVILES);
     eIngreso_hardcodeo(listaIngresos, listaAutomoviles, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
-    eEgreso_hardcodeo(listaEgresos, listaIngresos, listaAutomoviles, LIMITE_EGRESOS, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
+    eEgreso_init(listaEgresos, LIMITE_EGRESOS);
+    //eEgreso_hardcodeo(listaEgresos, listaIngresos, listaAutomoviles, LIMITE_EGRESOS, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
 
     while(seguir=='s')
     {
@@ -75,7 +77,7 @@ int main()
                 }
                 break;
             case 3:
-                puntoMenu = ePropietario_baja(listaPropietarios, LIMITE_PROPIETARIOS);
+                puntoMenu = ePropietario_baja(listaPropietarios, listaEgresos, listaIngresos, listaAutomoviles, LIMITE_PROPIETARIOS, LIMITE_EGRESOS, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
                 if(puntoMenu == 0)
                 {
                     printf("\nBaja de propietario OK");
@@ -424,4 +426,101 @@ void eEgreso_hardcodeo(eEgreso listaEgresos[], eIngreso listaIngresos[], eAutomo
         posicionAutomovil = eAutomovil_buscarPorIdEstacionados(listaAutomoviles, limiteAutomoviles, listaIngresos[posicionIngreso].idAutomovil);
         listaAutomoviles[posicionAutomovil].estado = NO_ESTACIONADO;
     }
+}
+
+int ePropietario_baja(ePropietario listaPropietarios[], eEgreso listaEgresos[], eIngreso listaIngresos[], eAutomovil listaAutomoviles[], int limitePropietarios, int limiteEgresos, int limiteIngresos, int limiteAutomoviles)
+{
+    int retorno = -1;
+    int indice;
+    int muestraListado;
+    int id;
+    char confirma[3];
+    int cancelaAccion = 0;
+    int posicionAutomovil;
+    int posicionIngreso;
+    char marcaAutomovil[TAM_MARCA];
+    int horasEstadia;
+    float precioEstadia;
+    float importeTotal = 0.0;
+
+    if(limitePropietarios > 0 && listaPropietarios != NULL)
+    {
+        retorno = -2;
+        do
+        {
+            muestraListado = ePropietario_mostrarListadoConOcupados(listaPropietarios, limitePropietarios);
+
+            switch(muestraListado)
+            {
+            case 0:
+                printf("\nNo hay propietarios para dar de baja"); //retorno = -2
+                break;
+            case 1:
+                id = pedirEnteroSinValidar("\nIngrese ID del propietario a dar de baja: ");
+                indice = ePropietario_buscarPorId(listaPropietarios, limitePropietarios, id);
+                if(indice < 0)
+                {
+                    printf("No se encontro el ID ingresado. Por favor reingrese\n");
+                }
+                else
+                {
+                    retorno = -3;
+                    //Confirmación de la acción por parte del usuario
+                    do
+                    {
+                        printf("\nSe va a dar de baja:");
+                        ePropietario_mostrarUno(listaPropietarios[indice]);
+                        pedirString("\nConfirma esta accion? (S/N): ", confirma, 3);
+                        if(stricmp(confirma, "S") != 0 && stricmp(confirma, "N") != 0)
+                        {
+                            printf("Debe ingresar S o N. Por favor reingrese\n");
+                        }
+                    } while(stricmp(confirma, "S") != 0 && stricmp(confirma, "N") != 0);
+
+                    if(stricmp(confirma, "S") == 0)
+                    {
+                        do //Doy de baja los automóviles estacionados del propietario
+                        {
+                            posicionAutomovil = eAutomovil_buscarPorIdPropietario(listaAutomoviles, limiteAutomoviles, id);
+                            do //doy de baja el ingreso del automóvil, si lo hubiere
+                            {
+                                posicionIngreso = eIngreso_buscarPorIdAutomovil(listaIngresos, limiteIngresos, listaAutomoviles[posicionAutomovil].idAutomovil);
+                                if(posicionIngreso >= 0) //Hago el egreso
+                                {
+                                    eAutomovil_retornaMarca(listaAutomoviles[posicionAutomovil].marca, marcaAutomovil);
+                                    horasEstadia = eEgreso_devolverHorasEstadia();
+                                    precioEstadia = eEgreso_devolverPrecioEstadia(listaAutomoviles[posicionAutomovil].marca);
+                                    importeTotal = importeTotal + (horasEstadia * precioEstadia);
+                                    retorno = eEgreso_alta(listaEgresos, limiteEgresos, listaIngresos[posicionIngreso].idIngreso, listaPropietarios[indice].nombreApellido, listaAutomoviles[posicionAutomovil].patente, marcaAutomovil, horasEstadia, precioEstadia);
+
+                                    if(retorno == 0) //Si la baja fue satisfactoria
+                                    {
+                                        listaIngresos[posicionIngreso].estado = RETIRADO;
+                                    }
+                                }
+                            } while(posicionIngreso >= 0);
+
+                            listaAutomoviles[posicionAutomovil].estado = BAJA;
+                        } while(posicionAutomovil >= 0);
+
+                        printf("\nImporte total a abonar por el Propietario: %5.2f", importeTotal);
+                        retorno = 0; //OK
+                        listaPropietarios[indice].estado = BAJA;
+                    }
+                    else //retorno = -3
+                    {
+                        printf("Accion cancelada por el usuario\n");
+                        cancelaAccion = 1;
+                    }
+                }
+
+                break;
+            default:
+                printf("\Error al listar...\n"); //retorno = -2
+                break;
+            }
+        } while(indice < 0 && muestraListado == 1 && cancelaAccion == 0);
+    }
+
+    return retorno;
 }

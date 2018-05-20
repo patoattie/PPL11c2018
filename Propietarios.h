@@ -30,7 +30,6 @@ int ePropietario_mostrarListado(ePropietario[] ,int limite);
 int ePropietario_mostrarListadoConOcupados(ePropietario[] ,int limite);
 
 int ePropietario_alta(ePropietario[] ,int limite);
-int ePropietario_baja(ePropietario[] ,int limite);
 int ePropietario_modificacion(ePropietario[] ,int limite);
 
 #endif // PROPIETARIOS_H_INCLUDED

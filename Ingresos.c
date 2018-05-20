@@ -87,6 +87,26 @@ int eIngreso_buscarPorId(eIngreso listado[] ,int limite, int id)
     return retorno;
 }
 
+int eIngreso_buscarPorIdAutomovil(eIngreso listado[] ,int limite, int idAutomovil)
+{
+    int retorno = -1;
+    int i;
+    if(limite > 0 && listado != NULL)
+    {
+        retorno = -2;
+        for(i=0;i<limite;i++)
+        {
+            if(listado[i].estado == INGRESADO && listado[i].idAutomovil == idAutomovil)
+            {
+                retorno = i;
+                //Hallé el elemento que buscaba y retorno su indice
+                break;
+            }
+        }
+    }
+    return retorno;
+}
+
 void eIngreso_mostrarUno(eIngreso parametro, char nombrePropietario[], char patente[], char marca[])
 {
     printf("\n %d - %s - %s - %s", parametro.idIngreso, patente, marca, nombrePropietario);

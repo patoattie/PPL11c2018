@@ -15,6 +15,7 @@ typedef struct
 
 void eIngreso_init(eIngreso[],int limite);
 int eIngreso_buscarPorId(eIngreso[] ,int limite, int id);
+int eIngreso_buscarPorIdAutomovil(eIngreso[] ,int limite, int idAutomovil);
 int eIngreso_siguienteId(eIngreso[] ,int limite);
 int eIngreso_buscarLugarLibre(eIngreso listado[],int limite);
 
