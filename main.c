@@ -8,6 +8,7 @@
 #include "Egresos.h"
 
 int eAutomovil_mostrarListado(eAutomovil[], ePropietario[], int limiteAutomoviles, int limitePropietarios);
+int eAutomovil_mostrarListadoEstacionados(eAutomovil[], ePropietario[], int limiteAutomoviles, int limitePropietarios);
 int eAutomovil_ingreso(eAutomovil[], ePropietario[], int limiteAutomoviles, int limitePropietarios);
 int eAutomovil_egreso(eAutomovil[], ePropietario[], eIngreso[], int limiteAutomoviles, int limitePropietarios, int limiteIngresos);
 int eIngreso_mostrarListado(eIngreso[], ePropietario[], eAutomovil[], int limiteAutomoviles, int limitePropietarios, int limiteIngresos);
@@ -45,8 +46,8 @@ int main()
     ePropietario_hardcodeo(listaPropietarios, LIMITE_PROPIETARIOS);
     eAutomovil_hardcodeo(listaAutomoviles, LIMITE_AUTOMOVILES);
     eIngreso_hardcodeo(listaIngresos, listaAutomoviles, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
-    //eEgreso_init(listaEgresos, LIMITE_EGRESOS);
-    eEgreso_hardcodeo(listaEgresos, listaIngresos, listaAutomoviles, LIMITE_EGRESOS, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
+    eEgreso_init(listaEgresos, LIMITE_EGRESOS);
+    //eEgreso_hardcodeo(listaEgresos, listaIngresos, listaAutomoviles, LIMITE_EGRESOS, LIMITE_INGRESOS, LIMITE_AUTOMOVILES);
 
     while(seguir=='s')
     {
@@ -60,8 +61,11 @@ int main()
         printf(" 6- Egreso de automovil\n");
         printf(" 7- Listado de automoviles\n");
         printf(" 8- Recaudacion Total\n");
-        printf(" 9- Recaudacion Total por Marca\n\n");
-        printf("10- Salir\n");
+        printf(" 9- Recaudacion Total por Marca\n");
+        printf("10- Listado de automoviles estacionados por propietario\n");
+        printf("11- Listado de propietarios con automoviles Audi estacionados\n");
+        printf("12- Listado de automoviles estacionados\n\n");
+        printf("13- Salir\n");
 
         scanf("%d",&opcion);
 
@@ -171,7 +175,14 @@ int main()
                     printf("\nRecaudacion %s: %5.2f", marcaAutomovil, importeTotal);
                 }
                 break;
-            case 10:
+            case 12:
+                puntoMenu = eAutomovil_mostrarListadoEstacionados(listaAutomoviles, listaPropietarios, LIMITE_AUTOMOVILES, LIMITE_PROPIETARIOS);
+                if(puntoMenu == 0)
+                {
+                    printf("\nListado de automoviles estacionados OK");
+                }
+                break;
+            case 13:
                 seguir = 'n';
                 break;
             default:
@@ -207,6 +218,36 @@ int eAutomovil_mostrarListado(eAutomovil listaAutomoviles[], ePropietario listaP
                 posicionPropietario = ePropietario_buscarPorId(listaPropietarios, limitePropietarios, listaAutomoviles[i].idPropietario);
                 //Se muestra al menos un elemento del array
                 eAutomovil_mostrarUnoConEstado(listaAutomoviles[i], listaPropietarios[posicionPropietario].nombreApellido);
+            }
+        }
+
+        if(retorno == 0)
+        {
+            printf("\n*** NO HAY ELEMENTOS PARA MOSTRAR ***");
+        }
+    }
+    return retorno;
+}
+
+int eAutomovil_mostrarListadoEstacionados(eAutomovil listaAutomoviles[], ePropietario listaPropietarios[], int limiteAutomoviles, int limitePropietarios)
+{
+    int retorno = -1;
+    int i;
+    int posicionPropietario;
+    eAutomovil listaOrdenada[LIMITE_AUTOMOVILES];
+    int ordena;
+
+    if(limiteAutomoviles > 0 && listaAutomoviles != NULL && listaPropietarios != NULL)
+    {
+        retorno = eAutomovil_filtraEstacionados(listaAutomoviles, listaOrdenada, limiteAutomoviles);
+        if(retorno == 1)
+        {
+            retorno = eAutomovil_ordenaPorPatente(listaOrdenada, limiteAutomoviles);
+            for(i=0; i<limiteAutomoviles; i++)
+            {
+                posicionPropietario = ePropietario_buscarPorId(listaPropietarios, limitePropietarios, listaOrdenada[i].idPropietario);
+                //Se muestra al menos un elemento del array
+                eAutomovil_mostrarUnoConEstado(listaOrdenada[i], listaPropietarios[posicionPropietario].nombreApellido);
             }
         }
 

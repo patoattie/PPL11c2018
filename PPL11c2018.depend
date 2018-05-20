@@ -59,7 +59,7 @@
 	"../Programacion-I/pattie/Funciones/funciones.h"
 	"Ingresos.h"
 
-1526778114 source:f:\mis documentos\escritorio\programacion\utn\programacion 1\ppl11c2018\main.c
+1526823861 source:f:\mis documentos\escritorio\programacion\utn\programacion 1\ppl11c2018\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -71,7 +71,7 @@
 
 1526775921 f:\mis documentos\escritorio\programacion\utn\programacion 1\ppl11c2018\propietarios.h
 
-1526776266 f:\mis documentos\escritorio\programacion\utn\programacion 1\ppl11c2018\automoviles.h
+1526823375 f:\mis documentos\escritorio\programacion\utn\programacion 1\ppl11c2018\automoviles.h
 
 1526775921 source:f:\mis documentos\escritorio\programacion\utn\programacion 1\ppl11c2018\propietarios.c
 	<stdio.h>
@@ -80,7 +80,7 @@
 	"../Programacion-I/pattie/Funciones/funciones.h"
 	"Propietarios.h"
 
-1526779847 source:f:\mis documentos\escritorio\programacion\utn\programacion 1\ppl11c2018\automoviles.c
+1526823876 source:f:\mis documentos\escritorio\programacion\utn\programacion 1\ppl11c2018\automoviles.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

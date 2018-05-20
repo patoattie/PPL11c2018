@@ -40,5 +40,7 @@ int eAutomovil_mostrarListadoPropietario(eAutomovil[], int limite, int idPropiet
 int eAutomovil_alta(eAutomovil[], int limite, int idPropietario, char nombrePropietario[]);
 
 void eAutomovil_retornaMarca(int marca, char nombreMarca[]);
+int eAutomovil_ordenaPorPatente(eAutomovil[], int limite);
+int eAutomovil_filtraEstacionados(eAutomovil listaOrigen[], eAutomovil listaDestino[], int limite);
 
 #endif // AUTOMOVILES_H_INCLUDED

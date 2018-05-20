@@ -433,3 +433,57 @@ void eAutomovil_retornaMarca(int marca, char nombreMarca[])
         break;
     }
 }
+
+int eAutomovil_ordenaPorPatente(eAutomovil listado[], int limite)
+{
+    int i;
+    int j;
+    eAutomovil auxiliar;
+    int retorno = 0;
+
+    if(limite > 0 && listado != NULL)
+    {
+        retorno = 1;
+
+        for(i = 0; i < limite - 1; i++)
+        {
+            for(j = i + 1; j < limite; j++)
+            {
+                if(stricmp(listado[i].patente, listado[j].patente) > 0)
+                {
+                    auxiliar = listado[i];
+                    listado[i] = listado[j];
+                    listado[j] = auxiliar;
+                }
+            }
+        }
+    }
+
+    return retorno;
+}
+
+int eAutomovil_filtraEstacionados(eAutomovil listaOrigen[], eAutomovil listaDestino[], int limite)
+{
+    int i;
+    int retorno = -1;
+    int posicionDestino = 0;
+
+    eAutomovil_init(listaDestino, limite);
+
+    if(limite > 0 && listaOrigen != NULL)
+    {
+        retorno = 0;
+
+        for(i = 0; i < limite; i++)
+        {
+            if(listaOrigen[i].estado == ESTACIONADO)
+            {
+                retorno = 1;
+                listaDestino[posicionDestino] = listaOrigen[i];
+                posicionDestino++;
+            }
+        }
+    }
+
+    return retorno;
+}
