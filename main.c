@@ -188,7 +188,7 @@ int main()
                 puntoMenu = ePropietario_mostrarAutomovilesEstacionadosAudi(listaAutomoviles, listaPropietarios, LIMITE_AUTOMOVILES, LIMITE_PROPIETARIOS);
                 if(puntoMenu == 1)
                 {
-                    printf("\nListado de automoviles estacionados por propietario OK");
+                    printf("\nListado de automoviles estacionados de marca Audi OK");
                 }
                 break;
             case 12:
@@ -689,42 +689,26 @@ int ePropietario_mostrarAutomovilesEstacionadosAudi(eAutomovil listaAutomoviles[
     int retorno = -1;
     int i;
     int posicionPropietario;
-    int idPropietario;
-    int muestraListado;
 
     if(limiteAutomoviles > 0 && listaAutomoviles != NULL && listaPropietarios != NULL)
     {
         retorno = 0;
-        //Muestro listado de propietarios
-        muestraListado = ePropietario_mostrarListadoConOcupados(listaPropietarios, limitePropietarios);
-        //El usuario elige el propietario del cual quiere ver los automóviles que tiene estacionados
-        if(muestraListado == 1) //Sólo si hay propietarios que mostrar
+        for(i=0; i<limiteAutomoviles; i++)
         {
-            do //Pido ingreso de un ID de propietario válido
+            if(listaAutomoviles[i].estado == ESTACIONADO && listaAutomoviles[i].marca == AUDI)
             {
-                idPropietario = pedirEnteroSinValidar("\nIngrese ID del Propietario a listar los automoviles estacionados: ");
-                posicionPropietario = ePropietario_buscarPorId(listaPropietarios, limitePropietarios, idPropietario);
-                if(posicionPropietario < 0)
+                retorno = 1;
+                posicionPropietario = ePropietario_buscarPorId(listaPropietarios, limitePropietarios, listaAutomoviles[i].idPropietario);
+                if(posicionPropietario >= 0)
                 {
-                    printf("No se encontro el ID ingresado. Por favor reingrese\n");
-                }
-            } while(posicionPropietario < 0);
-
-            for(i=0; i<limiteAutomoviles; i++)
-            {
-                if(listaAutomoviles[i].estado == ESTACIONADO && listaAutomoviles[i].idPropietario == idPropietario)
-                {
-                    retorno = 1;
-
-                    //Se muestra al menos un elemento del array
                     eAutomovil_mostrarUnoConEstado(listaAutomoviles[i], listaPropietarios[posicionPropietario].nombreApellido);
                 }
             }
+        }
 
-            if(retorno == 0)
-            {
-                printf("\n*** NO HAY ELEMENTOS PARA MOSTRAR ***");
-            }
+        if(retorno == 0)
+        {
+            printf("\n*** NO HAY ELEMENTOS PARA MOSTRAR ***");
         }
     }
     return retorno;

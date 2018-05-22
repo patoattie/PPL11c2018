@@ -88,7 +88,7 @@ int eAutomovil_siguienteId(eAutomovil listado[],int limite)
     {
         for(i=0; i<limite; i++)
         {
-            if(listado[i].estado == NO_ESTACIONADO || listado[i].estado == BAJA) //Tengo en cuenta las bajas lógicas para no duplicar id al rehabilitar
+            if(listado[i].estado == NO_ESTACIONADO || listado[i].estado == BAJA || listado[i].estado == ESTACIONADO) //Tengo en cuenta las bajas lógicas para no duplicar id al rehabilitar
             {
                     if(listado[i].idAutomovil>retorno)
                     {
